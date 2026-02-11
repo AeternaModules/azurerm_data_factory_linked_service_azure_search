@@ -1,5 +1,5 @@
-resource "azurerm_data_factory_linked_service_azure_search" "data_factory_linked_service_azure_searchs" {
-  for_each = var.data_factory_linked_service_azure_searchs
+resource "azurerm_data_factory_linked_service_azure_search" "data_factory_linked_service_azure_searches" {
+  for_each = var.data_factory_linked_service_azure_searches
 
   data_factory_id          = each.value.data_factory_id
   name                     = each.value.name

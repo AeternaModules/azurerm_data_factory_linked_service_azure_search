@@ -1,6 +1,6 @@
-variable "data_factory_linked_service_azure_searchs" {
+variable "data_factory_linked_service_azure_searches" {
   description = <<EOT
-Map of data_factory_linked_service_azure_searchs, attributes below
+Map of data_factory_linked_service_azure_searches, attributes below
 Required:
     - data_factory_id
     - name
