@@ -25,27 +25,38 @@ EOT
     integration_runtime_name = optional(string)
     parameters               = optional(map(string))
   }))
-  # --- Unconfirmed validation candidates, derived from azurerm_data_factory_linked_service_azure_search's provider source ---
-  # Not auto-enabled: either a bespoke provider validator we can't safely translate,
-  # or a path that crosses a list-typed block (needs its own for_each wrapping).
-  # Review, translate into a real validation{} block above, and delete once confirmed.
-  # path: name
-  #   source:    [from validate.LinkedServiceDatasetName] regexp.MustCompile(`^[-.+?/<>*%&:\\]+$`).MatchString(value)
-  # path: data_factory_id
-  #   source:    [from factories.ValidateFactoryID] !ok
-  # path: data_factory_id
-  #   source:    [from factories.ValidateFactoryID] err != nil
-  # path: url
-  #   condition: length(value) > 0
-  #   message:   must not be empty
-  # path: search_service_key
-  #   condition: length(value) > 0
-  #   message:   must not be empty
-  # path: description
-  #   condition: length(value) > 0
-  #   message:   must not be empty
-  # path: integration_runtime_name
-  #   condition: length(value) > 0
-  #   message:   must not be empty
+  validation {
+    condition = alltrue([
+      for k, v in var.data_factory_linked_service_azure_searches : (
+        length(v.url) > 0
+      )
+    ])
+    error_message = "must not be empty"
+  }
+  validation {
+    condition = alltrue([
+      for k, v in var.data_factory_linked_service_azure_searches : (
+        length(v.search_service_key) > 0
+      )
+    ])
+    error_message = "must not be empty"
+  }
+  validation {
+    condition = alltrue([
+      for k, v in var.data_factory_linked_service_azure_searches : (
+        v.description == null || (length(v.description) > 0)
+      )
+    ])
+    error_message = "must not be empty"
+  }
+  validation {
+    condition = alltrue([
+      for k, v in var.data_factory_linked_service_azure_searches : (
+        v.integration_runtime_name == null || (length(v.integration_runtime_name) > 0)
+      )
+    ])
+    error_message = "must not be empty"
+  }
+  # Note: 3 additional provider-side validators are enforced at apply time but not mirrored as validation{} blocks here (bespoke or non-mechanically-translatable).
 }
 
